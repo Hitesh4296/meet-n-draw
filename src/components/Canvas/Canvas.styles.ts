@@ -1,5 +1,5 @@
 import styled from "styled-components";
 
 export const Canvas = styled.canvas`
-  background-color: ivory;
+  background-color: #fff;
 `;
