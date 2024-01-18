@@ -42,7 +42,6 @@ const CanvasProvider = ({
 
     const newElement = createElement(clientX, clientY, clientX, clientY);
 
-    // rc.draw(newElement.element);
     setElements((prevState) => [...prevState, newElement]);
   };
 
@@ -57,7 +56,7 @@ const CanvasProvider = ({
     const { x1, y1 } = lastElement;
 
     const updatedElement = createElement(x1, y1, clientX, clientY);
-    const existingState = elements;
+    const existingState = [...elements];
 
     existingState[lastIndex] = updatedElement;
 
@@ -72,16 +71,14 @@ const CanvasProvider = ({
     const canvas = ref.current;
     canvas?.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
     setShowCanvas(true);
-  }, []);
 
-  useLayoutEffect(() => {
-    const canvas = ref.current;
     const rc = rough.canvas(canvas);
 
     elements.forEach((el) => {
+      console.log();
       rc.draw(el.element);
     });
-  });
+  }, [elements]);
 
   return (
     <CanvasContext.Provider value={{ canvasRef: ref }}>
