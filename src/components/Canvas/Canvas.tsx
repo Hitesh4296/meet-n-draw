@@ -6,22 +6,22 @@ import {
   useState,
   useRef,
   MouseEventHandler,
-  useEffect,
 } from "react";
-import { flushSync } from "react-dom";
 import rough from "roughjs";
-
-// context
-import CanvasContext from "./Context";
+import { getStroke } from "perfect-freehand";
 
 // styles
 import { Canvas } from "./Canvas.styles";
 
-const CanvasProvider = ({
-  children,
-}: {
-  children?: ReactNode | ReactNode[];
-}) => {
+// context
+import { useCanvasContext } from "./Context";
+import { SHAPE_PRESETS } from "./types";
+let elementID = 0;
+
+// utils
+import { getSvgPathFromStroke } from "./Canvas.utils";
+
+const CanvasProvider = () => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [showCanvas, setShowCanvas] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -29,10 +29,112 @@ const CanvasProvider = ({
 
   const generator = rough.generator();
 
-  const createElement = (x1: number, y1: number, x2: number, y2: number) => {
-    const element = generator.line(x1, y1, x2, y2);
+  const { selectedPreset } = useCanvasContext();
 
-    return { x1, y1, x2, y2, element };
+  const createElement = (
+    id: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    shapePresetIdentifier: SHAPE_PRESETS
+  ) => {
+    let element;
+    let freeDrawPoints = [];
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.LINE) {
+      element = generator.line(x1, y1, x2, y2);
+    }
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.RECTANGLE) {
+      element = generator.rectangle(x1, y1, x2 - x1, y2 - y1);
+    }
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.ELLIPSE) {
+      element = generator.ellipse(
+        (x1 + x2) / 2,
+        (y1 + y2) / 2,
+        x2 - x1,
+        y2 - y1
+      );
+    }
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.ARROW) {
+      const line = generator.line(x1, y1, x2, y2);
+
+      if (Math.abs(x2 - x1) > 5 || Math.abs(y2 - y1) > 5) {
+        // Calculate the angle between the line and the x-axis
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+
+        // Calculate coordinates for arrowhead
+        const x3 = x2 - 20 * Math.cos(angle - Math.PI / 6);
+        const y3 = y2 - 20 * Math.sin(angle - Math.PI / 6);
+
+        const x4 = x2 - 20 * Math.cos(angle + Math.PI / 6);
+        const y4 = y2 - 20 * Math.sin(angle + Math.PI / 6);
+
+        const arrowL = generator.line(x2, y2, x3, y3);
+        const arrowR = generator.line(x2, y2, x4, y4);
+
+        element = [line, arrowL, arrowR];
+      } else {
+        element = [line];
+      }
+    }
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
+    }
+
+    return {
+      id,
+      x1,
+      y1,
+      x2,
+      y2,
+      element,
+      shapePresetIdentifier,
+      freeDrawPoints,
+    };
+  };
+
+  const updateElement = (
+    id: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    shapePresetIdentifier: SHAPE_PRESETS,
+    previousElement?: any
+  ) => {
+    if (
+      shapePresetIdentifier === SHAPE_PRESETS.ARROW ||
+      shapePresetIdentifier === SHAPE_PRESETS.LINE ||
+      shapePresetIdentifier === SHAPE_PRESETS.ELLIPSE ||
+      shapePresetIdentifier === SHAPE_PRESETS.RECTANGLE
+    ) {
+      return createElement(id, x1, y1, x2, y2, shapePresetIdentifier);
+    }
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
+      if (previousElement === undefined) {
+        return {
+          id,
+          x1,
+          x2,
+          y1,
+          y2,
+          shapePresetIdentifier,
+          freeDrawPoints: [{ x: x1, y: y2 }],
+        };
+      }
+
+      previousElement = {
+        ...previousElement,
+        freeDrawPoints: [...previousElement.freeDrawPoints, { x: x2, y: y2 }],
+      };
+
+      return previousElement;
+    }
   };
 
   const startDrawing: MouseEventHandler<HTMLCanvasElement> = (event) => {
@@ -40,7 +142,14 @@ const CanvasProvider = ({
 
     const { clientX, clientY } = event;
 
-    const newElement = createElement(clientX, clientY, clientX, clientY);
+    const newElement = updateElement(
+      elementID,
+      clientX,
+      clientY,
+      clientX,
+      clientY,
+      selectedPreset
+    );
 
     setElements((prevState) => [...prevState, newElement]);
   };
@@ -55,7 +164,15 @@ const CanvasProvider = ({
 
     const { x1, y1 } = lastElement;
 
-    const updatedElement = createElement(x1, y1, clientX, clientY);
+    const updatedElement = updateElement(
+      elementID,
+      x1,
+      y1,
+      clientX,
+      clientY,
+      selectedPreset,
+      lastElement
+    );
     const existingState = [...elements];
 
     existingState[lastIndex] = updatedElement;
@@ -65,34 +182,51 @@ const CanvasProvider = ({
 
   const stopDrawing = () => {
     setIsDrawing(false);
+    elementID++;
   };
 
   useLayoutEffect(() => {
     const canvas = ref.current;
-    canvas?.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+    const canvasContext = canvas?.getContext("2d");
+    canvasContext?.clearRect(
+      0,
+      0,
+      canvas?.width || window.innerWidth,
+      canvas?.height || window.innerHeight
+    );
     setShowCanvas(true);
 
     const rc = rough.canvas(canvas);
 
     elements.forEach((el) => {
-      console.log();
-      rc.draw(el.element);
+      if (
+        el.shapePresetIdentifier === SHAPE_PRESETS.LINE ||
+        el.shapePresetIdentifier === SHAPE_PRESETS.RECTANGLE ||
+        el.shapePresetIdentifier === SHAPE_PRESETS.ELLIPSE
+      ) {
+        rc.draw(el.element);
+      } else if (el.shapePresetIdentifier === SHAPE_PRESETS.ARROW) {
+        el.element.map((it) => {
+          rc.draw(it);
+        });
+      } else if (el.shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
+        canvasContext?.fill(
+          new Path2D(getSvgPathFromStroke(getStroke(el.freeDrawPoints)))
+        );
+      }
     });
   }, [elements]);
 
   return (
-    <CanvasContext.Provider value={{ canvasRef: ref }}>
-      <Canvas
-        ref={ref}
-        id="my-canvas"
-        width={showCanvas ? window.innerWidth : ""}
-        height={showCanvas ? window.innerHeight : ""}
-        onMouseDown={startDrawing}
-        onMouseMove={trackPointer}
-        onMouseUp={stopDrawing}
-      ></Canvas>
-      {children && children}
-    </CanvasContext.Provider>
+    <Canvas
+      ref={ref}
+      id="my-canvas"
+      width={showCanvas ? window.innerWidth : ""}
+      height={showCanvas ? window.innerHeight : ""}
+      onMouseDown={startDrawing}
+      onMouseMove={trackPointer}
+      onMouseUp={stopDrawing}
+    ></Canvas>
   );
 };
 

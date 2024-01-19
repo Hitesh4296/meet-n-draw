@@ -1,0 +1,8 @@
+export enum SHAPE_PRESETS {
+  LINE,
+  ARROW,
+  RECTANGLE,
+  ELLIPSE,
+  FREE_DRAW,
+  TEXT,
+}

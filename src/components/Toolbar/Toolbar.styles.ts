@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Toolbar = styled.div`
   position: absolute;
-  height: 44px;
+  height: 56px;
   border-radius: 8px;
   min-width: 200px;
   background: ivory;
@@ -12,4 +12,30 @@ export const Toolbar = styled.div`
   top: 20px;
   left: 50%;
   transform: translate(-50%, 0);
+  display: flex;
+  align-items: center;
+  padding: 6px;
+`;
+
+export const IconContainer = styled.div<{
+  $isSelected: boolean;
+  $isFillable: boolean;
+}>`
+  height: 44px;
+  width: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 6px;
+
+  :hover {
+    background: #e0dffe;
+  }
+
+  ${({ $isSelected, $isFillable }) => `
+    background: ${$isSelected ? "#e0dffe" : ""};
+
+    svg {
+      fill: ${$isFillable && $isSelected ? "#000" : ""}
+    }
+  `}
 `;

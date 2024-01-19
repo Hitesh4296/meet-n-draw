@@ -1,17 +1,26 @@
 // libs
-import { memo, ReactNode } from "react";
+import { memo, ReactNode, useState } from "react";
+
 // components
 import Canvas from "../Canvas";
+import CanvasContext from "../Canvas/Context";
+
+// types
+import { SHAPE_PRESETS } from "../Canvas/types";
 
 // styles
 import Toolbar from "../Toolbar";
 
-const Excalidraw = ({ children }: { children?: ReactNode }) => {
+const Excalidraw = () => {
+  const [elementType, setElementType] = useState(SHAPE_PRESETS.LINE);
+
   return (
-    <Canvas>
+    <CanvasContext.Provider
+      value={{ selectedPreset: elementType, setPreset: setElementType }}
+    >
+      <Canvas />
       <Toolbar />
-      {children && children}
-    </Canvas>
+    </CanvasContext.Provider>
   );
 };
 
