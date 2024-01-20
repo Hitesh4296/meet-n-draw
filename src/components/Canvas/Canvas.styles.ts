@@ -2,4 +2,5 @@ import styled from "styled-components";
 
 export const Canvas = styled.canvas`
   background-color: #fff;
+  touch-action: none;
 `;

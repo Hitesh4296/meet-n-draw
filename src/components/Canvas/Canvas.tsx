@@ -20,16 +20,17 @@ let elementID = 0;
 
 // utils
 import { getSvgPathFromStroke } from "./Canvas.utils";
+import { Drawable } from "roughjs/bin/core";
 
 const CanvasProvider = () => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [showCanvas, setShowCanvas] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [elements, setElements] = useState<any>([]);
 
   const generator = rough.generator();
 
-  const { selectedPreset } = useCanvasContext();
+  const { selectedPreset, elements, setElements, resetRedoAction } =
+    useCanvasContext();
 
   const createElement = (
     id: number,
@@ -40,7 +41,7 @@ const CanvasProvider = () => {
     shapePresetIdentifier: SHAPE_PRESETS
   ) => {
     let element;
-    let freeDrawPoints = [];
+    let freeDrawPoints: Record<string, number>[] = [];
 
     if (shapePresetIdentifier === SHAPE_PRESETS.LINE) {
       element = generator.line(x1, y1, x2, y2);
@@ -80,9 +81,6 @@ const CanvasProvider = () => {
       } else {
         element = [line];
       }
-    }
-
-    if (shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
     }
 
     return {
@@ -135,10 +133,15 @@ const CanvasProvider = () => {
 
       return previousElement;
     }
+
+    if (shapePresetIdentifier === SHAPE_PRESETS.TEXT) {
+      return { id, x1, y1, shapePresetIdentifier, text: "HELLO" };
+    }
   };
 
   const startDrawing: MouseEventHandler<HTMLCanvasElement> = (event) => {
     setIsDrawing(true);
+    resetRedoAction();
 
     const { clientX, clientY } = event;
 
@@ -188,6 +191,11 @@ const CanvasProvider = () => {
   useLayoutEffect(() => {
     const canvas = ref.current;
     const canvasContext = canvas?.getContext("2d");
+
+    if (canvas === null) {
+      return;
+    }
+
     canvasContext?.clearRect(
       0,
       0,
@@ -206,13 +214,15 @@ const CanvasProvider = () => {
       ) {
         rc.draw(el.element);
       } else if (el.shapePresetIdentifier === SHAPE_PRESETS.ARROW) {
-        el.element.map((it) => {
+        el.element.map((it: Drawable) => {
           rc.draw(it);
         });
       } else if (el.shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
         canvasContext?.fill(
           new Path2D(getSvgPathFromStroke(getStroke(el.freeDrawPoints)))
         );
+      } else if (el.shapePresetIdentifier === SHAPE_PRESETS.TEXT) {
+        canvasContext?.fillText(el.text, el.x1, el.y1);
       }
     });
   }, [elements]);
@@ -224,7 +234,9 @@ const CanvasProvider = () => {
       width={showCanvas ? window.innerWidth : ""}
       height={showCanvas ? window.innerHeight : ""}
       onMouseDown={startDrawing}
+      // onPointerDown={startDrawing}
       onMouseMove={trackPointer}
+      // onPointerMove={trackPointer}
       onMouseUp={stopDrawing}
     ></Canvas>
   );

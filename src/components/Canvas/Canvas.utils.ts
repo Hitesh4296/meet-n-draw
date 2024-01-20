@@ -1,4 +1,4 @@
-export function getSvgPathFromStroke(stroke) {
+export function getSvgPathFromStroke(stroke: number[][]) {
   if (!stroke.length) return "";
 
   const d = stroke.reduce(

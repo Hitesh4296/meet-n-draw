@@ -6,10 +6,10 @@ import { useCanvasContext } from "../Canvas/Context";
 
 // icons
 import {
-  PenModeIcon,
+  UndoIcon,
   EllipseIcon,
   RectangleIcon,
-  DiamondIcon,
+  RedoIcon,
   ArrowIcon,
   FreedrawIcon,
   TextIcon,
@@ -21,7 +21,8 @@ import { Toolbar as Container, IconContainer } from "./Toolbar.styles";
 import { SHAPE_PRESETS } from "../Canvas/types";
 
 const Toolbar = () => {
-  const { selectedPreset, setPreset } = useCanvasContext();
+  const { selectedPreset, setPreset, undoAction, redoAction } =
+    useCanvasContext();
 
   const ICONS_CONFIG = [
     { icon: LineIcon, presetIdentifier: SHAPE_PRESETS.LINE, fillable: false },
@@ -44,8 +45,23 @@ const Toolbar = () => {
     { icon: TextIcon, presetIdentifier: SHAPE_PRESETS.TEXT, fillable: false },
   ];
 
+  const ACTION_ITEMS = [
+    { icon: UndoIcon, actionCallback: undoAction, fillable: false },
+    { icon: RedoIcon, actionCallback: redoAction, fillable: false },
+  ];
+
   return (
     <Container>
+      {ACTION_ITEMS.map((item, index) => (
+        <IconContainer
+          key={index}
+          $isSelected={false}
+          $isFillable={item.fillable}
+          onClick={item.actionCallback}
+        >
+          {item.icon}
+        </IconContainer>
+      ))}
       {ICONS_CONFIG.map((item, index) => (
         <IconContainer
           key={index}
