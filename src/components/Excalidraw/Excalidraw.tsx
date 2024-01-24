@@ -6,15 +6,18 @@ import Canvas from "../Canvas";
 import CanvasContext from "../Canvas/Context";
 
 // types
-import { SHAPE_PRESETS } from "../Canvas/types";
+import { ACTION_TYPES, SHAPE_PRESETS } from "../Canvas/types";
 
 // styles
 import Toolbar from "../Toolbar";
+import OptionsSelector from "../OptionsSelector";
 
 const Excalidraw = () => {
   const [elementType, setElementType] = useState(SHAPE_PRESETS.LINE);
   const [elements, setElements] = useState<Record<string, any>[]>([]);
   const [redoElements, setRedoElements] = useState<Record<string, any>[]>([]);
+  const [actionType, setActionType] = useState<ACTION_TYPES>(ACTION_TYPES.IDLE);
+  const [options, setOptions] = useState({});
 
   const undoAction = useCallback(() => {
     if (elements.length === 0) return;
@@ -51,10 +54,15 @@ const Excalidraw = () => {
         undoAction,
         redoAction,
         resetRedoAction,
+        actionType,
+        setActionType,
+        options,
+        setOptions,
       }}
     >
       <Canvas />
       <Toolbar />
+      <OptionsSelector />
     </CanvasContext.Provider>
   );
 };

@@ -14,14 +14,15 @@ import {
   FreedrawIcon,
   TextIcon,
   LineIcon,
+  DiamondIcon,
 } from "../Icons";
 
 // styles
 import { Toolbar as Container, IconContainer } from "./Toolbar.styles";
-import { SHAPE_PRESETS } from "../Canvas/types";
+import { ACTION_TYPES, SHAPE_PRESETS } from "../Canvas/types";
 
 const Toolbar = () => {
-  const { selectedPreset, setPreset, undoAction, redoAction } =
+  const { selectedPreset, setPreset, undoAction, redoAction, setActionType } =
     useCanvasContext();
 
   const ICONS_CONFIG = [
@@ -30,6 +31,11 @@ const Toolbar = () => {
     {
       icon: RectangleIcon,
       presetIdentifier: SHAPE_PRESETS.RECTANGLE,
+      fillable: true,
+    },
+    {
+      icon: DiamondIcon,
+      presetIdentifier: SHAPE_PRESETS.DIAMOND,
       fillable: true,
     },
     {
@@ -69,6 +75,7 @@ const Toolbar = () => {
           $isFillable={item.fillable}
           onClick={() => {
             setPreset(item.presetIdentifier);
+            setActionType(ACTION_TYPES.IDLE);
           }}
         >
           {item.icon}

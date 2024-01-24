@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@jaames/iro": "^5.5.2",
     "next": "14.0.4",
     "perfect-freehand": "^1.2.0",
     "react": "^18",

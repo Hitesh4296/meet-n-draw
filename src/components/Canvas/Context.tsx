@@ -2,7 +2,7 @@
 import { RefObject, createContext, useContext } from "react";
 
 // types
-import { SHAPE_PRESETS } from "./types";
+import { ACTION_TYPES, SHAPE_PRESETS } from "./types";
 
 // const [elements, setElements] = useState<Record<string, any>[]>([]);
 
@@ -14,6 +14,10 @@ interface ICanvasContext {
   undoAction: VoidFunction;
   redoAction: VoidFunction;
   resetRedoAction: VoidFunction;
+  actionType: ACTION_TYPES;
+  setActionType: (newActionType: ACTION_TYPES) => void;
+  options: Record<string, any>;
+  setOptions: (any) => void;
 }
 
 const CanvasContext = createContext<ICanvasContext>({
@@ -25,6 +29,10 @@ const CanvasContext = createContext<ICanvasContext>({
   undoAction: () => {},
   redoAction: () => {},
   resetRedoAction: () => {},
+  actionType: ACTION_TYPES.IDLE,
+  setActionType: () => {},
+  options: {},
+  setOptions: () => {},
 });
 
 export const useCanvasContext = () => useContext(CanvasContext);

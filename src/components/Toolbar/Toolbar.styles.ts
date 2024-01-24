@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Toolbar = styled.div`
   position: absolute;
-  height: 56px;
+  height: 42px;
   border-radius: 8px;
   min-width: 200px;
   background: ivory;
@@ -21,8 +21,8 @@ export const IconContainer = styled.div<{
   $isSelected: boolean;
   $isFillable: boolean;
 }>`
-  height: 44px;
-  width: 44px;
+  height: 30px;
+  width: 30px;
   border-radius: 8px;
   overflow: hidden;
   margin-right: 6px;
