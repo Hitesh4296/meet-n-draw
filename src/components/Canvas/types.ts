@@ -22,4 +22,5 @@ export interface ElementOptions {
   previousElement?: any;
   text?: string;
   pressure?: number;
+  elementOptions: Record<string, any>;
 }

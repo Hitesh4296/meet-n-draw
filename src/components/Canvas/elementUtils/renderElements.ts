@@ -22,6 +22,7 @@ const renderElements = (elements: any[], canvas: HTMLCanvasElement) => {
         rc.draw(it);
       });
     } else if (el.shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
+      canvasContext.fillStyle = el.color || "#000";
       canvasContext?.fill(
         new Path2D(
           getSvgPathFromStroke(
@@ -46,6 +47,8 @@ const renderElements = (elements: any[], canvas: HTMLCanvasElement) => {
         )
       );
     } else if (el.shapePresetIdentifier === SHAPE_PRESETS.TEXT) {
+      canvasContext.font = "24px Arial";
+      canvasContext.fillStyle = el.color || "#000w";
       canvasContext?.fillText(el.text, el.x1, el.y1);
     }
   });

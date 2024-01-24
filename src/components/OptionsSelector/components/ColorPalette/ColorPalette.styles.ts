@@ -33,10 +33,11 @@ export const ColorPicker = styled.input`
 
 export const CustomColorContainer = styled.div`
   height: 24px;
-  width: 24px;
+  width: 84px;
   display: inline-flex;
   position: relative;
   top: -6px;
+  overflow: hidden;
 `;
 
 export const ColorCodeInput = styled.input`

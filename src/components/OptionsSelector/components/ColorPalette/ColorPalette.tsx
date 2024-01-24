@@ -15,24 +15,14 @@ import {
   ColorInputContainer,
 } from "./ColorPalette.styles";
 
-const BASE_COLOR_SWATCHES = [
-  "000000",
-  "FF6900",
-  "FCB900",
-  "7BDCB5",
-  "00D084",
-  "8ED1FC",
-  "EB144C",
-  "F78DA7",
-  "9900EF",
-];
+const BASE_COLOR_SWATCHES = ["FF6900", "FCB900", "7BDCB5", "00D084"];
 
 const ColorPalette = ({ onChange }: ColorPaletteProps) => {
   const [customColor, setCustomColor] = useState<string>("000000");
 
   const colorChangeHandler = (color: string) => {
     setCustomColor(color);
-    onChange(color);
+    onChange(`#${color}`);
   };
 
   return (
@@ -41,7 +31,7 @@ const ColorPalette = ({ onChange }: ColorPaletteProps) => {
         <ColorSwatch
           $colorCode={colorCode}
           key={index}
-          onClick={() => onChange(colorCode)}
+          onClick={() => onChange(`#${colorCode}`)}
         />
       ))}
       <CustomColorContainer>

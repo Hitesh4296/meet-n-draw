@@ -10,7 +10,7 @@ import { useCanvasContext } from "../Canvas/Context";
 // components
 
 const OptionsSelector = () => {
-  const { setOptions } = useCanvasContext();
+  const { setOptions, options, selectedPreset } = useCanvasContext();
 
   const updateOptions = (propertyName, property) => {
     setOptions((prevState) => ({ ...prevState, [propertyName]: property }));

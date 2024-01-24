@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Sidebar = styled.div`
   position: absolute;
-  width: 200px;
   border-radius: 4px;
   background: ivory;
   box-shadow: 0px 0px 0.9310142993927002px 0px rgba(0, 0, 0, 0.17),
@@ -11,7 +10,7 @@ export const Sidebar = styled.div`
   top: 200px;
   left: 40px;
   align-items: center;
-  padding: 12px 6px 12px 12px;
+  padding: 12px;
   z-index: 2;
 `;
 

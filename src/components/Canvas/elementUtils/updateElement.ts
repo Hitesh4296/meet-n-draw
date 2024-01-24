@@ -8,10 +8,8 @@ import createElement from "./createElement";
 const updateElement = (
   shapePresetIdentifier: SHAPE_PRESETS,
   id: number,
-  { x1, x2, y1, y2, previousElement, text }: ElementOptions
+  { x1, x2, y1, y2, previousElement, text, elementOptions }: ElementOptions
 ) => {
-  // fix logic for diamond;
-  // current hint: identify coordinates and draw 4 lines. this might make selection complex in future
   if (
     shapePresetIdentifier === SHAPE_PRESETS.ARROW ||
     shapePresetIdentifier === SHAPE_PRESETS.LINE ||
@@ -19,7 +17,13 @@ const updateElement = (
     shapePresetIdentifier === SHAPE_PRESETS.RECTANGLE ||
     shapePresetIdentifier === SHAPE_PRESETS.DIAMOND
   ) {
-    return createElement(shapePresetIdentifier, id, { x1, y1, x2, y2 });
+    return createElement(shapePresetIdentifier, id, {
+      x1,
+      y1,
+      x2,
+      y2,
+      elementOptions,
+    });
   }
 
   if (shapePresetIdentifier === SHAPE_PRESETS.FREE_DRAW) {
@@ -38,6 +42,7 @@ const updateElement = (
     previousElement = {
       ...previousElement,
       freeDrawPoints: [...previousElement.freeDrawPoints, { x: x2, y: y2 }],
+      color: elementOptions?.stroke,
     };
 
     return previousElement;
@@ -50,6 +55,7 @@ const updateElement = (
       y1,
       shapePresetIdentifier,
       text,
+      color: elementOptions?.stroke,
     };
   }
 };

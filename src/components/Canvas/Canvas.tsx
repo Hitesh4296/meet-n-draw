@@ -52,6 +52,7 @@ const CanvasProvider = () => {
       y1: clientY,
       x2: clientX,
       y2: clientY,
+      elementOptions: options,
     });
 
     setElements((prevState) => [...prevState, newElement]);
@@ -74,6 +75,7 @@ const CanvasProvider = () => {
       y2: clientY,
       previousElement: lastElement,
       text: textAreaRef.current?.value || "",
+      elementOptions: options,
     });
     const existingState = [...elements];
 
@@ -108,6 +110,7 @@ const CanvasProvider = () => {
       y2: y1,
       previousElement: lastElement,
       text: textAreaRef.current?.value || "",
+      elementOptions: options,
     });
     const existingState = [...elements];
 
