@@ -7,7 +7,16 @@ import { ElementOptions, SHAPE_PRESETS } from "../types";
 const createElement = (
   shapePresetIdentifier: SHAPE_PRESETS,
   id: number,
-  { x1, x2, y1, y2, pressure, elementOptions }: ElementOptions
+  {
+    x1,
+    x2,
+    y1,
+    y2,
+    pressure,
+    text,
+    elementOptions,
+    previousElement,
+  }: ElementOptions
 ) => {
   let element;
   let freeDrawPoints: Record<string, number>[] = [];
@@ -76,8 +85,11 @@ const createElement = (
       y2,
       element,
       shapePresetIdentifier,
-      freeDrawPoints: [{ x: x1, y: y1, pressure }],
+      freeDrawPoints: previousElement
+        ? [...previousElement?.freeDrawPoints, { x: x2, y: y2 }]
+        : [{ x: x2, y: y2 }],
       text: "",
+      color: elementOptions?.stroke,
     };
   }
 
@@ -89,7 +101,8 @@ const createElement = (
       element,
       shapePresetIdentifier,
       freeDrawPoints,
-      text: "",
+      text: text || "",
+      color: elementOptions?.stroke,
     };
   }
 

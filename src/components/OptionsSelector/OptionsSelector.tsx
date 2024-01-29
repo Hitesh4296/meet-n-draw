@@ -6,6 +6,7 @@ import { Sidebar } from "./OptionsSelector.styles";
 import ColorPalette from "./components/ColorPalette";
 import OptionWrapper from "./components/OptionWrapper";
 import { useCanvasContext } from "../Canvas/Context";
+import PreviewCanvas from "./components/PreviewCanvas";
 
 // components
 
@@ -13,7 +14,9 @@ const OptionsSelector = () => {
   const { setOptions, options, selectedPreset } = useCanvasContext();
 
   const updateOptions = (propertyName, property) => {
-    setOptions((prevState) => ({ ...prevState, [propertyName]: property }));
+    setOptions((prevState) => {
+      return { ...prevState, [propertyName]: property };
+    });
   };
 
   const TOOLS_CONFIG = [
@@ -33,6 +36,7 @@ const OptionsSelector = () => {
 
   return (
     <Sidebar>
+      <PreviewCanvas options={options} selectedPreset={selectedPreset} />
       {TOOLS_CONFIG.map(({ title, component, propertyName, onChange }) => (
         <OptionWrapper
           key={title}

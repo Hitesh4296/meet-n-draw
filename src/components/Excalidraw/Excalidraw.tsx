@@ -17,7 +17,7 @@ const Excalidraw = () => {
   const [elements, setElements] = useState<Record<string, any>[]>([]);
   const [redoElements, setRedoElements] = useState<Record<string, any>[]>([]);
   const [actionType, setActionType] = useState<ACTION_TYPES>(ACTION_TYPES.IDLE);
-  const [options, setOptions] = useState({});
+  const [options, setOptions] = useState({ fill: "#fff", stroke: "#000" });
 
   const undoAction = useCallback(() => {
     if (elements.length === 0) return;

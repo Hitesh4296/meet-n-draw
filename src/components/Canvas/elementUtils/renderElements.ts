@@ -27,7 +27,7 @@ const renderElements = (elements: any[], canvas: HTMLCanvasElement) => {
         new Path2D(
           getSvgPathFromStroke(
             getStroke(el.freeDrawPoints, {
-              size: 32,
+              size: 16,
               thinning: 0.5,
               smoothing: 0.5,
               streamline: 0.5,
