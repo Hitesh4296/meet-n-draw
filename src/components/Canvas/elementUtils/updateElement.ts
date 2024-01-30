@@ -36,6 +36,7 @@ const updateElement = (
         y2,
         shapePresetIdentifier,
         freeDrawPoints: [{ x: x1, y: y2 }],
+        isVisible: true,
       };
     }
 
@@ -56,6 +57,7 @@ const updateElement = (
       shapePresetIdentifier,
       text,
       color: elementOptions?.stroke,
+      isVisible: true,
     };
   }
 };

@@ -90,6 +90,7 @@ const createElement = (
         : [{ x: x2, y: y2 }],
       text: "",
       color: elementOptions?.stroke,
+      isVisible: true,
     };
   }
 
@@ -103,6 +104,7 @@ const createElement = (
       freeDrawPoints,
       text: text || "",
       color: elementOptions?.stroke,
+      isVisible: true,
     };
   }
 
@@ -116,6 +118,7 @@ const createElement = (
     shapePresetIdentifier,
     freeDrawPoints,
     text: "",
+    isVisible: true,
   };
 };
 
