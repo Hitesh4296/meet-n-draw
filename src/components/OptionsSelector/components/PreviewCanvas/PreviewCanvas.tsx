@@ -10,8 +10,8 @@ interface PreviewCanvasProps {
 
 // styles
 import { Container, Canvas } from "./PreviewCanvas.styles";
-import createElement from "@/components/Canvas/elementUtils/createElement";
-import renderElements from "@/components/Canvas/elementUtils/renderElements";
+import createElement from "@/utils/createElement";
+import renderElements from "@/utils/renderElements";
 
 const PreviewCanvas = ({ selectedPreset, options }: PreviewCanvasProps) => {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);

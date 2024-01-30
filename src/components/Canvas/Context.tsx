@@ -4,8 +4,6 @@ import { RefObject, createContext, useContext } from "react";
 // types
 import { ACTION_TYPES, SHAPE_PRESETS } from "./types";
 
-// const [elements, setElements] = useState<Record<string, any>[]>([]);
-
 interface ICanvasContext {
   selectedPreset: SHAPE_PRESETS;
   setPreset: (newPreset: SHAPE_PRESETS) => void;
@@ -18,11 +16,12 @@ interface ICanvasContext {
   setActionType: (newActionType: ACTION_TYPES) => void;
   options: Record<string, any>;
   setOptions: (any) => void;
+  selectedIds: number[];
+  setSelectedIds: (ids: number[]) => void;
 }
 
 const CanvasContext = createContext<ICanvasContext>({
   selectedPreset: SHAPE_PRESETS.LINE,
-  // @ts-ignore
   setPreset: () => {},
   elements: [],
   setElements: () => {},
@@ -33,6 +32,8 @@ const CanvasContext = createContext<ICanvasContext>({
   setActionType: () => {},
   options: {},
   setOptions: () => {},
+  selectedIds: [],
+  setSelectedIds: () => {},
 });
 
 export const useCanvasContext = () => useContext(CanvasContext);

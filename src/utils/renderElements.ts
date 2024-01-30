@@ -1,8 +1,8 @@
 import { RefObject } from "react";
 import rough from "roughjs";
-import { SHAPE_PRESETS } from "../types";
+import { SHAPE_PRESETS } from "../components/Canvas/types";
 import { Drawable } from "roughjs/bin/core";
-import { getSvgPathFromStroke } from "../Canvas.utils";
+import { getSvgPathFromStroke } from "../components/Canvas/Canvas.utils";
 import { getStroke } from "perfect-freehand";
 
 const renderElements = (elements: any[], canvas: HTMLCanvasElement) => {

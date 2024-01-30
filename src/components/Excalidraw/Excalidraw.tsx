@@ -11,6 +11,8 @@ import { ACTION_TYPES, SHAPE_PRESETS } from "../Canvas/types";
 // styles
 import Toolbar from "../Toolbar";
 import OptionsSelector from "../OptionsSelector";
+import { hideLastMatchingElement } from "@/utils/hideLastMatchingElement";
+import { unhideLastMatchingElement } from "@/utils/unhideLastMatchingElement";
 
 const Excalidraw = () => {
   const [elementType, setElementType] = useState(SHAPE_PRESETS.LINE);
@@ -18,6 +20,7 @@ const Excalidraw = () => {
   const [redoElements, setRedoElements] = useState<Record<string, any>[]>([]);
   const [actionType, setActionType] = useState<ACTION_TYPES>(ACTION_TYPES.IDLE);
   const [options, setOptions] = useState({ fill: "#fff", stroke: "#000" });
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const undoAction = useCallback(() => {
     if (elements.length === 0) return;
@@ -26,7 +29,7 @@ const Excalidraw = () => {
 
     const lastElement: Record<string, any> = existingElements.pop();
 
-    setElements(existingElements);
+    setElements(unhideLastMatchingElement(existingElements, lastElement.id));
     setRedoElements((prevState) => [...prevState, lastElement]);
   }, [elements]);
 
@@ -36,7 +39,10 @@ const Excalidraw = () => {
 
     const lastElementFromRedo = redoStack.pop();
 
-    setElements((prevState) => [...prevState, lastElementFromRedo]);
+    setElements((prevState) => [
+      ...hideLastMatchingElement(prevState, lastElementFromRedo.id),
+      lastElementFromRedo,
+    ]);
     setRedoElements(redoStack);
   }, [redoElements]);
 
@@ -58,6 +64,8 @@ const Excalidraw = () => {
         setActionType,
         options,
         setOptions,
+        selectedIds,
+        setSelectedIds,
       }}
     >
       <Canvas />

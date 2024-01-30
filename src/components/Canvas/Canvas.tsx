@@ -17,9 +17,9 @@ import { ACTION_TYPES, SHAPE_PRESETS } from "./types";
 let elementID = 0;
 
 // utils
-import createElement from "./elementUtils/createElement";
-import updateElement from "./elementUtils/updateElement";
-import renderElements from "./elementUtils/renderElements";
+import createElement from "../../utils/createElement";
+import updateElement from "../../utils/updateElement";
+import renderElements from "../../utils/renderElements";
 
 const CanvasProvider = () => {
   const ref = useRef<HTMLCanvasElement>(null);

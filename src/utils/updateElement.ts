@@ -2,7 +2,7 @@
 import rough from "roughjs";
 
 // types
-import { ElementOptions, SHAPE_PRESETS } from "../types";
+import { ElementOptions, SHAPE_PRESETS } from "../components/Canvas/types";
 import createElement from "./createElement";
 
 const updateElement = (

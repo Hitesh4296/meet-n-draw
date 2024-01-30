@@ -1,11 +1,16 @@
 import styled from "styled-components";
 
-export const ColorSwatch = styled.div<{ $colorCode: string }>`
+export const ColorSwatch = styled.div<{
+  $colorCode: string;
+  $isSelected: boolean;
+}>`
   height: 24px;
   width: 24px;
   border-radius: 2px;
   margin: 0 6px 6px 0;
   background: ${({ $colorCode }) => `#${$colorCode}`};
+  border: 1px solid #fff;
+  border-color: ${({ $isSelected }) => ($isSelected ? "#000" : "#fff")};
   display: inline-block;
 `;
 
@@ -31,13 +36,15 @@ export const ColorPicker = styled.input`
   top: -5px;
 `;
 
-export const CustomColorContainer = styled.div`
+export const CustomColorContainer = styled.div<{$isSelected: boolean}>`
   height: 24px;
   width: 84px;
   display: inline-flex;
   position: relative;
   top: -6px;
   overflow: hidden;
+  border: 1px solid #fff;
+  border-color: ${({ $isSelected }) => ($isSelected ? "#000" : "#fff")};
 `;
 
 export const ColorCodeInput = styled.input`

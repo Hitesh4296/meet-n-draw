@@ -2,24 +2,17 @@
 import rough from "roughjs";
 
 // types
-import { ElementOptions, SHAPE_PRESETS } from "../types";
+import { ElementOptions, SHAPE_PRESETS } from "../components/Canvas/types";
 
 const createElement = (
   shapePresetIdentifier: SHAPE_PRESETS,
   id: number,
-  {
-    x1,
-    x2,
-    y1,
-    y2,
-    pressure,
-    text,
-    elementOptions,
-    previousElement,
-  }: ElementOptions
+  options: ElementOptions
 ) => {
   let element;
   let freeDrawPoints: Record<string, number>[] = [];
+  const { x1, x2, y1, y2, pressure, text, elementOptions, previousElement } =
+    options;
 
   const generator = rough.generator();
 
