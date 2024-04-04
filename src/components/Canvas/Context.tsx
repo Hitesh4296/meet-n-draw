@@ -1,20 +1,20 @@
 // libs
-import { RefObject, createContext, useContext } from "react";
+import { Dispatch, RefObject, SetStateAction, createContext, useContext } from "react";
 
 // types
-import { ACTION_TYPES, SHAPE_PRESETS } from "./types";
+import { ACTION_TYPES, ElementOptions, SHAPE_PRESETS } from "./types";
 
 interface ICanvasContext {
   selectedPreset: SHAPE_PRESETS;
   setPreset: (newPreset: SHAPE_PRESETS) => void;
   elements: Record<string, any>[];
-  setElements: Record<string, any>;
+  setElements: Dispatch<SetStateAction<Record<string, any>[]>>;
   undoAction: VoidFunction;
   redoAction: VoidFunction;
   resetRedoAction: VoidFunction;
   actionType: ACTION_TYPES;
   setActionType: (newActionType: ACTION_TYPES) => void;
-  options: Record<string, any>;
+  options: ElementOptions;
   setOptions: (any) => void;
   selectedIds: number[];
   setSelectedIds: (ids: number[]) => void;
@@ -30,7 +30,11 @@ const CanvasContext = createContext<ICanvasContext>({
   resetRedoAction: () => {},
   actionType: ACTION_TYPES.IDLE,
   setActionType: () => {},
-  options: {},
+  options: {x1: 0,
+    y1: 0,
+    x2: 0,
+    y2: 0,
+    elementOptions: {}},
   setOptions: () => {},
   selectedIds: [],
   setSelectedIds: () => {},

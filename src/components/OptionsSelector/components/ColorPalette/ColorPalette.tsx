@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 
 // defs
-interface ColorPaletteProps {
+export interface ColorPaletteProps {
   onChange: (color: string) => void;
   selectedProperty: string;
 }

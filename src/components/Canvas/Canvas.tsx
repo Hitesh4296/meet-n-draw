@@ -24,7 +24,7 @@ import renderElements from "../../utils/renderElements";
 const CanvasProvider = () => {
   const ref = useRef<HTMLCanvasElement>(null);
   const [showCanvas, setShowCanvas] = useState(false);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textAreaRef = useRef<HTMLInputElement>(null);
 
   const {
     selectedPreset,

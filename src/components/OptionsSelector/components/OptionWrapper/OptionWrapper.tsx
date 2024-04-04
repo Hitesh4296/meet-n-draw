@@ -1,14 +1,13 @@
 import {
-  JSXElementConstructor,
-  ReactComponentElement,
-  ReactElement,
+  MemoExoticComponent,
 } from "react";
+import { ColorPaletteProps } from "../ColorPalette/ColorPalette";
 
 interface OptionWrapperProps {
   onSelect: (propertyName: string, options: any) => void;
   propertyName: string;
   title: string;
-  Component: ({ onChange }: any) => JSX.Element;
+  Component: MemoExoticComponent<({ onChange, selectedProperty }: ColorPaletteProps) => JSX.Element>;
   selectedProperty: string;
 }
 
